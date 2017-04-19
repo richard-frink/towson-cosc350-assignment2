@@ -92,6 +92,8 @@ public class SntpClient
                 
                 System.out.println("Delay: ");
                 
+                System.out.println("Response data rate: ");
+		
                 // Below are original output lines
                 
 		System.out.println("Dest. timestamp:     " +
