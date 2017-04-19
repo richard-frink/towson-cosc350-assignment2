@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -31,23 +31,19 @@ import java.text.DecimalFormat;
  *  
  * @author Adam Buckley
  */
+
 public class SntpClient
 {
 	public static void main(String[] args) throws IOException
 	{
+                // Server name
 		String serverName;
 		
-		// Process command-line args
-		if(args.length==1)
-		{
-			serverName = args[0];
-		}
-		else
-		{
-			printUsage();
-			return;
-		}
-		
+                // Reading in the server info from client
+		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("Enter in the server address (hint: try 0.north-america.pool.ntp.org): ");
+		serverName = inFromUser.readLine();
+
 		// Send request
 		DatagramSocket socket = new DatagramSocket();
 		InetAddress address = InetAddress.getByName(serverName);
@@ -86,9 +82,18 @@ public class SntpClient
 		
 		
 		// Display response
-		System.out.println("NTP server: " + serverName);
-		System.out.println(msg.toString());
+		System.out.println("NTP server IP: " + serverName);
 		
+                // Below are added output lines
+                
+                System.out.println("Client IP and Port: ");
+                
+                System.out.println("Recieve Size: ");
+                
+                System.out.println("Delay: ");
+                
+                // Below are original output lines
+                
 		System.out.println("Dest. timestamp:     " +
 			NtpMessage.timestampToString(destinationTimestamp));
 		
@@ -99,30 +104,5 @@ public class SntpClient
 			new DecimalFormat("0.00").format(localClockOffset*1000) + " ms");
 		
 		socket.close();
-	}
-	
-	
-	
-	/**
-	 * Prints usage
-	 */
-	static void printUsage()
-	{
-		System.out.println(
-			"NtpClient - an NTP client for Java.\n" +
-			"\n" +
-			"This program connects to an NTP server and prints the response to the console.\n" +
-			"\n" +
-			"\n" +
-			"Usage: java NtpClient server\n" +
-			"\n" +
-			"\n" +
-			"This program is copyright (c) Adam Buckley 2004 and distributed under the terms\n" +
-			"of the GNU General Public License.  This program is distributed in the hope\n" +
-			"that it will be useful, but WITHOUT ANY WARRANTY; without even the implied\n" +
-			"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU\n" +
-			"General Public License available at http://www.gnu.org/licenses/gpl.html for\n" +
-			"more details.");
-					
 	}
 }
