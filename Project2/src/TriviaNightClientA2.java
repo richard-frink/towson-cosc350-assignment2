@@ -55,6 +55,10 @@ public class TriviaNightClientA2
 		DatagramPacket packet =
 			new DatagramPacket(buf, buf.length, address, 123);
 		
+                // User ip address and port used for socket
+                String clientIP = InetAddress.getLocalHost().toString();
+                int port = socket.getLocalPort();
+                
 		// Set the transmit timestamp *just* before sending the packet
 		// ToDo: Does this actually improve performance or not?
 		NtpMessage.encodeTimestamp(packet.getData(), 40,
@@ -88,19 +92,21 @@ public class TriviaNightClientA2
 			((msg.receiveTimestamp - msg.originateTimestamp) +
 			(msg.transmitTimestamp - destinationTimestamp)) / 2;
 		
-		
-		// Display response
-		System.out.println("NTP server IP: " + serverName);
+                InetAddress info = packet.getAddress();
+                int size = packet.getData().length;
+                
+                // Display response
+		System.out.println("NTP server IP: " + info.toString());
 		
                 // Below are added output lines
                 
-                System.out.println("Client IP and Port: ");
+                System.out.println("Client IP and Port: " + clientIP + ", " + port);
                 
-                System.out.println("Recieve Size: ");
+                System.out.println("Recieve Size: " + size + "bytes");
                 
                 System.out.println("Delay: " + (end - start) + "ms"); // T2 - T1
                 
-                System.out.println("Response data rate: ");
+                System.out.println("Response data rate: " + (end-start)/(size/8) + " bits per second");
 		
                 // Below are original output lines
                 
