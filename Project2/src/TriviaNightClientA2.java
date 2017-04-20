@@ -32,16 +32,20 @@ import java.text.DecimalFormat;
  * @author Adam Buckley
  */
 
-public class SntpClient
+public class TriviaNightClientA2
 {
 	public static void main(String[] args) throws IOException
 	{
                 // Server name
 		String serverName;
+                
+                // Long values used to keep track of delay between the message being sent and recieved
+                long start;
+                long end;
 		
                 // Reading in the server info from client
 		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Enter in the server address (hint: try 0.north-america.pool.ntp.org): ");
+		System.out.print("Enter in the server address (use this: 0.north-america.pool.ntp.org): ");
 		serverName = inFromUser.readLine();
 
 		// Send request
@@ -56,6 +60,8 @@ public class SntpClient
 		NtpMessage.encodeTimestamp(packet.getData(), 40,
 			(System.currentTimeMillis()/1000.0) + 2208988800.0);
 		
+                start = System.currentTimeMillis();
+                
 		socket.send(packet);
 		
 		
@@ -64,6 +70,8 @@ public class SntpClient
 		packet = new DatagramPacket(buf, buf.length);
 		socket.receive(packet);
 		
+                end = System.currentTimeMillis();
+                
 		// Immediately record the incoming timestamp
 		double destinationTimestamp =
 			(System.currentTimeMillis()/1000.0) + 2208988800.0;
@@ -90,7 +98,7 @@ public class SntpClient
                 
                 System.out.println("Recieve Size: ");
                 
-                System.out.println("Delay: ");
+                System.out.println("Delay: " + (end - start) + "ms"); // T2 - T1
                 
                 System.out.println("Response data rate: ");
 		
